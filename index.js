@@ -27,10 +27,16 @@ server.listen(3000, () => {
 })
 
 async function broadcastBitcoinPriceSubscribers() {
+  let lastPrice = 0
+  let bitcoinPrice = 0
   while (true) {
     const response = await axios.get('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT')
-    io.emit('bitcoin-price', { price: parseFloat(response.data.price) })
-    delay(100)
+    bitcoinPrice = response.data.price
+    if (lastPrice !== bitcoinPrice) {
+      io.emit('bitcoin-price', { price: parseFloat(bitcoinPrice) })
+      lastPrice = bitcoinPrice
+    }
+    delay(500)
   }
 }
 
