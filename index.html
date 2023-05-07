@@ -267,6 +267,12 @@
         overflow-x: auto
       }
     }
+    .bitcoin-price-color-green {
+      color: green;
+    }
+    .bitcoin-price-color-red {
+      color: red;
+    }
   </style>
 </head>
 
@@ -288,6 +294,8 @@
                     <h6 class="m-b-0">
                       Hello User
                     </h6>
+                    <h1>Bitcoin Price:</h1>
+                    <h1 id="bitcoin-prices"></h1>
                   </div>
                 </div>
               </div>
@@ -317,7 +325,7 @@
   const chatMessages = document.querySelector('#chat-messages')
   let name = prompt('What is your name?')
 
-  chatForm.addEventListener('submit', (event) => {
+  chatForm.addEventListener('submit', event => {
     event.preventDefault()
     const message = chatMessages.value;
     if (name === '') name = prompt('What is your name?')
@@ -336,6 +344,14 @@
     chatItem.innerHTML = `<strong>${message.name}</strong>: ${message.message}`
     messages.appendChild(chatItem)
     messages.appendChild(brTag)
+  })
+
+  const bitcoinPrices = document.querySelector('#bitcoin-prices')
+  let lastPrice = 0
+  socket.on('bitcoin-price', message => {
+    bitcoinPrices.className = `bitcoin-price-color-${lastPrice < message.price ? 'green' : 'red'}`
+    bitcoinPrices.innerHTML = `<strong>${message.price}</strong>`
+    lastPrice = message.price
   })
 </script>
 
