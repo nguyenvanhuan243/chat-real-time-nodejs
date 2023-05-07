@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .note {
+        font-size: 120%;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      Bitcoin Chat Group
+    </h1>
+    <ul id="messages">
+    </ul>
+    <form id="chat-form">
+      <input id="chat-messages" type="text" />
+      <button id="send-messages">
+        Send Message
+      </button>
+    </form>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const chatForm = document.querySelector('#chat-form')
+    const chatMessages = document.querySelector('#chat-messages')
+    
+    chatForm.addEventListener('submit', (event) => {
+      event.preventDefault()
+      const message = chatMessages.value;
+      socket.emit('on-chat', {
+        message: message
+      })
+      chatMessages.value = ''
+    })
+
+    const messages = document.querySelector('#messages');
+
+    socket.on('bitcoin-user-chat', message => {
+      const chatItem = document.createElement("li")
+      chatItem.textContent = message.message;
+      messages.appendChild(chatItem)
+    })
+  </script>
+</html>

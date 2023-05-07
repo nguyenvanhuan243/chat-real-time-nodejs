@@ -1,0 +1,18 @@
+{
+  "name": "chat_real_time_nodejs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/nguyenvanhuan243/chat_real_time_nodejs.git",
+  "author": "Huan Nguyen <nguyenvanhuan243@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
