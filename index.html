@@ -26,21 +26,23 @@
     const socket = io();
     const chatForm = document.querySelector('#chat-form')
     const chatMessages = document.querySelector('#chat-messages')
+    let name = prompt('What is your name?')
     
     chatForm.addEventListener('submit', (event) => {
       event.preventDefault()
       const message = chatMessages.value;
-      socket.emit('on-chat', {
-        message: message
-      })
-      chatMessages.value = ''
+      if (name === '') name = prompt('What is your name?')
+      if (message !== '') {
+        socket.emit('on-chat', { name: name, message: message })
+        chatMessages.value = ''
+      }
     })
 
-    const messages = document.querySelector('#messages');
+    const messages = document.querySelector('#messages')
 
     socket.on('bitcoin-user-chat', message => {
       const chatItem = document.createElement("li")
-      chatItem.textContent = message.message;
+      chatItem.textContent = `${message.name}: ${message.message}`
       messages.appendChild(chatItem)
     })
   </script>
