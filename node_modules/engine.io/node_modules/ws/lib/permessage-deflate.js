@@ -6,7 +6,6 @@ const bufferUtil = require('./buffer-util');
 const Limiter = require('./limiter');
 const { kStatusCode } = require('./constants');
 
-const FastBuffer = Buffer[Symbol.species];
 const TRAILER = Buffer.from([0x00, 0x00, 0xff, 0xff]);
 const kPerMessageDeflate = Symbol('permessage-deflate');
 const kTotalLength = Symbol('total-length');
@@ -438,9 +437,7 @@ class PerMessageDeflate {
         this._deflate[kTotalLength]
       );
 
-      if (fin) {
-        data = new FastBuffer(data.buffer, data.byteOffset, data.length - 4);
-      }
+      if (fin) data = data.slice(0, data.length - 4);
 
       //
       // Ensure that the callback will not be called again in

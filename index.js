@@ -7,6 +7,12 @@ const {
   Server
 } = require('socket.io')
 
+const {
+  WebSocket
+} = require('ws');
+
+
+
 const delay = require('delay')
 const io = new Server(server)
 const axios = require('axios');
@@ -40,4 +46,19 @@ async function broadcastBitcoinPriceSubscribers() {
   }
 }
 
+function connectBinanceSocket() {
+  const coin = 'btcusdt';
+  const binanceSocket = new WebSocket(`wss://fstream.binance.com/ws/${coin}@trade`);
+  binanceSocket.on('message', data => {
+    if (data) {
+      const trade = JSON.parse(data);
+      console.log(trade);
+      binanceSocket.emit('binance-bitcoin-price', { data: trade })
+      delay(5000)
+    }
+  });
+  
+}
+
 broadcastBitcoinPriceSubscribers()
+connectBinanceSocket()

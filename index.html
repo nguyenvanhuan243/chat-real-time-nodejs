@@ -296,6 +296,7 @@
                     </h6>
                     <h1>Bitcoin Price:</h1>
                     <h1 id="bitcoin-prices"></h1>
+                    <h1 id="binance-bitcoin-price"></h1>
                   </div>
                 </div>
               </div>
@@ -352,6 +353,12 @@
     bitcoinPrices.className = `bitcoin-price-color-${lastPrice < message.price ? 'green' : 'red'}`
     bitcoinPrices.innerHTML = `<strong>${message.price}</strong>`
     lastPrice = message.price
+  })
+
+  const binanceCoin = document.querySelector('#binance-bitcoin-price')
+  socket.on('binance-bitcoin-price', message => {
+    console.log(message.data)
+    binanceCoin.innerHTML = `<strong>${message.data['p']}</strong>`
   })
 </script>
 

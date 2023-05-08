@@ -1,7 +1,5 @@
 'use strict';
 
-const { isUtf8 } = require('buffer');
-
 //
 // Allowed token characters:
 //
@@ -113,16 +111,13 @@ module.exports = {
   tokenChars
 };
 
-if (isUtf8) {
-  module.exports.isValidUTF8 = function (buf) {
-    return buf.length < 24 ? _isValidUTF8(buf) : isUtf8(buf);
-  };
-} /* istanbul ignore else  */ else if (!process.env.WS_NO_UTF_8_VALIDATE) {
+/* istanbul ignore else  */
+if (!process.env.WS_NO_UTF_8_VALIDATE) {
   try {
     const isValidUTF8 = require('utf-8-validate');
 
     module.exports.isValidUTF8 = function (buf) {
-      return buf.length < 32 ? _isValidUTF8(buf) : isValidUTF8(buf);
+      return buf.length < 150 ? _isValidUTF8(buf) : isValidUTF8(buf);
     };
   } catch (e) {
     // Continue regardless of the error.

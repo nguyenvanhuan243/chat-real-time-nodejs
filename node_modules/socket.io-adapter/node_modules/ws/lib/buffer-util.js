@@ -2,8 +2,6 @@
 
 const { EMPTY_BUFFER } = require('./constants');
 
-const FastBuffer = Buffer[Symbol.species];
-
 /**
  * Merges an array of buffers into a new buffer.
  *
@@ -25,9 +23,7 @@ function concat(list, totalLength) {
     offset += buf.length;
   }
 
-  if (offset < totalLength) {
-    return new FastBuffer(target.buffer, target.byteOffset, offset);
-  }
+  if (offset < totalLength) return target.slice(0, offset);
 
   return target;
 }
@@ -69,11 +65,11 @@ function _unmask(buffer, mask) {
  * @public
  */
 function toArrayBuffer(buf) {
-  if (buf.length === buf.buffer.byteLength) {
+  if (buf.byteLength === buf.buffer.byteLength) {
     return buf.buffer;
   }
 
-  return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.length);
+  return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
 }
 
 /**
@@ -92,9 +88,9 @@ function toBuffer(data) {
   let buf;
 
   if (data instanceof ArrayBuffer) {
-    buf = new FastBuffer(data);
+    buf = Buffer.from(data);
   } else if (ArrayBuffer.isView(data)) {
-    buf = new FastBuffer(data.buffer, data.byteOffset, data.byteLength);
+    buf = Buffer.from(data.buffer, data.byteOffset, data.byteLength);
   } else {
     buf = Buffer.from(data);
     toBuffer.readOnly = false;
