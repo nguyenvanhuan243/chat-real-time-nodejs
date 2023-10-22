@@ -36,7 +36,7 @@ async function broadcastBitcoinPriceSubscribers() {
   let lastPrice = 0
   let bitcoinPrice = 0
   while (true) {
-    const response = await axios.get('https://bscexchange.finance/api/v1/fimarketcap/markets/401')
+    const response = await axios.get('https://bscexchange.finance/api/v1/fimarketcap/markets/84501')
     bitcoinPrice = response.data.current_price
     if (lastPrice !== bitcoinPrice) {
       io.emit('bitcoin-price', { price: parseFloat(bitcoinPrice) })
